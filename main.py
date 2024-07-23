@@ -13,9 +13,11 @@ os.environ["OPENAI_API_KEY"] = "your_openai_api_key"
 
 app = FastAPI()
 
+# Define the query model for request body
 class QueryRequest(BaseModel):
     query: str
 
+# Define the query model for response body
 class QueryResponse(BaseModel):
     response: str
 
@@ -39,6 +41,7 @@ embeddings = OpenAIEmbeddings()
 document_search = FAISS.from_texts(texts, embeddings)
 chain = load_qa_chain(OpenAI(), chain_type="stuff")
 
+#Query Endpoint: An endpoint to handle queries, perform similarity search on the indexed documents, and return the response from the QA chain.
 @app.post("/query", response_model=QueryResponse)
 async def query_endpoint(request: QueryRequest):
     query = request.query
